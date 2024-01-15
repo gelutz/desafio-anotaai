@@ -1,0 +1,13 @@
+- os seguintes casos precisam ser rotas:
+    [-] Como usuário, cadastrar produto linkado com um dono, e com diversas informações:
+        titulo, descricao, preço, categoria, ID do dono
+    [-] Como usuário, poder cadastrar uma categoria (relação 1 pra 1 com o produto)
+    [-] Como usuário, assossiar um produto à categoria
+    [-] Como usuário, poder atualizar as informações de produtos e categorias
+    [-] como usuário, poder deletar produtos ou categorias
+    [-] be able to carry lots of requests per second
+    [-] o catálogo de produtos e categorias deve ser buscado em um bucket S3 para que o tempo de resposta seja bem curto
+    [-] quando ouver uma atualização no catálogo, publicar a muança para o tópico "catalog-emit"
+    [-] implementar um consumidor que escuta por movimentos específicos do SQS
+    [-] ao receber uma mensagem, o sistema deve fazer a busca no banco
+        e atualizar os dados que estão no JSON gerado dentro do bucket S3
