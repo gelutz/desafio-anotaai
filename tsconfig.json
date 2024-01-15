@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    // "lib": [],
+    // "experimentalDecorators": true,
+    // "emitDecoratorMetadata": true,
+    // "useDefineForClassFields": true,
+    "module": "commonjs",
+    "rootDir": "./",
+    "outDir": "./build",
+    // "moduleResolution": "node10",
+    // "paths": {},
+    // "newLine": "crlf",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  }
+}
