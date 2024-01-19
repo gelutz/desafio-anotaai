@@ -7,9 +7,10 @@
     "dev": "ts-node src/server.ts",
     "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json"
   },
-  "keywords": [],
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "author": "Gabriel Lutz",
-  "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.8.1",
     "express": "^4.18.2",

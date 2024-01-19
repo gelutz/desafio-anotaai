@@ -25,7 +25,7 @@ model Product {
   description String?
   price       Float
   category    Category @relation(fields: [categoryId], references: [id])
-  owner       User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
   categoryId  String   @db.ObjectId
   userId      String   @db.ObjectId
 }
