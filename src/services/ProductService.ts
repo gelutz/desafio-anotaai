@@ -1,4 +1,5 @@
 import { PrismaClient, Product } from "@prisma/client";
+import { Optional } from "@prisma/client/runtime/library";
 
 export type ProductCreateType = Product;
 
@@ -9,8 +10,8 @@ export class ProductService {
         return await this.prisma.product.findMany();
     };
 
-    find = async (data: Product): Promise<Product | Product[]> => {
-        return this.prisma.product.findMany({
+    find = async (data: Optional<Product>): Promise<Product | null> => {
+        return await this.prisma.product.findFirst({
             where: data,
         });
     };

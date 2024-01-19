@@ -18,8 +18,6 @@ class ProductController {
 
         return res.status(201).send(newProduct);
     };
-
-    update;
 }
 
 export default new ProductController();
