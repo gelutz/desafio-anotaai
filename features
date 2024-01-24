@@ -1,5 +1,5 @@
 - os seguintes casos precisam ser rotas:
-    [-] Como usuário, cadastrar produto linkado com um dono, e com diversas informações:
+    [x] Como usuário, cadastrar produto linkado com um dono, e com diversas informações:
         titulo, descricao, preço, categoria, ID do dono
     [-] Como usuário, poder cadastrar uma categoria (relação 1 pra 1 com o produto)
     [-] Como usuário, assossiar um produto à categoria
