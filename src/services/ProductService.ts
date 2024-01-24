@@ -1,26 +1,27 @@
-import { PrismaClient, Product } from "@prisma/client";
-import { Optional } from "@prisma/client/runtime/library";
+import { Prisma, PrismaClient, Product } from "@prisma/client";
 
-export type ProductCreateType = Product;
+export type CreateProduct = Omit<Product, "id">;
 
 export class ProductService {
-    prisma = new PrismaClient();
+    private prisma: PrismaClient;
+
+    constructor(prismaClient: PrismaClient) {
+        this.prisma = prismaClient;
+    }
 
     listAll = async (): Promise<Product[]> => {
         return await this.prisma.product.findMany();
     };
 
-    find = async (data: Optional<Product>): Promise<Product | null> => {
-        return await this.prisma.product.findFirst({
-            where: data,
-        });
+    find = async (data: Prisma.ProductFindFirstArgs): Promise<Product | null> => {
+        return await this.prisma.product.findFirst(data);
     };
 
-    create = async (data: ProductCreateType): Promise<Product> => {
+    create = async (data: CreateProduct): Promise<Product> => {
         return await this.prisma.product.create({ data });
     };
 
-    update = async (id: string, data: ProductCreateType): Promise<Product> => {
+    update = async (id: string, data: Prisma.ProductCreateInput): Promise<Product> => {
         return await this.prisma.product.update({
             data,
             where: { id },
