@@ -1,8 +1,9 @@
 import { Category, Prisma, PrismaClient } from "@prisma/client";
+import { prisma } from "../interfaces/Prisma";
 
 export type CreateCategory = Omit<Category, "id">;
 
-export class CategoryService {
+class CategoryService {
     private prisma: PrismaClient;
 
     constructor(prismaClient: PrismaClient) {
@@ -32,3 +33,5 @@ export class CategoryService {
         await this.prisma.category.delete({ where: { id } });
     };
 }
+
+export const categoryService = new CategoryService(prisma);

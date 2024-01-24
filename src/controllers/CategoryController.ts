@@ -1,10 +1,9 @@
 import { Category } from "@prisma/client";
 import { Request, Response } from "express";
-import { prisma } from "../interfaces/Prisma";
-import { CategoryService, CreateCategory } from "../services/CategoryService";
+import { CreateCategory, categoryService } from "../services/CategoryService";
 
 class CategoryController {
-    categoryService = new CategoryService(prisma);
+    categoryService = categoryService;
 
     list = async (_: Request, res: Response): Promise<Response<Category>> => {
         const Categorys: Category[] = await this.categoryService.listAll();
