@@ -12,10 +12,13 @@ datasource db {
 
 model User {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  login    String
   name     String
   email    String    @unique
   password String
   Product  Product[]
+
+  @@map("users")
 }
 
 model Product {
@@ -28,6 +31,8 @@ model Product {
   user        User     @relation(fields: [userId], references: [id])
   categoryId  String   @db.ObjectId
   userId      String   @db.ObjectId
+
+  @@map("products")
 }
 
 model Category {
@@ -35,4 +40,6 @@ model Category {
   slug    String    @unique
   title   String
   Product Product[]
+
+  @@map("categories")
 }

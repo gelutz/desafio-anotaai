@@ -59,10 +59,12 @@ const seedUsers = async (): Promise<void> => {
         const name = `user${i}`;
         const email = `email${i}@email.com`;
         const password = `123123${i}`;
+        const login = `login-user-${i}`;
 
         await prisma.user.create({
             data: {
                 name,
+                login,
                 email,
                 password,
             },
