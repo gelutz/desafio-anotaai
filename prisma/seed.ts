@@ -1,4 +1,5 @@
 import { Category, PrismaClient, User } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -18,7 +19,7 @@ const seedProducts = async (categories: Category[], users: User[]): Promise<void
     const PRODUCT_COUNT = 10;
 
     for (let i = 0; i < PRODUCT_COUNT; i++) {
-        const slug = `category-seed-${i}`;
+        const slug = `product-seed-${i}`;
         const title = `title${i}`;
         const description = `description${i}`;
 
@@ -58,7 +59,8 @@ const seedUsers = async (): Promise<void> => {
     for (let i = 0; i < USER_COUNT; i++) {
         const name = `user${i}`;
         const email = `email${i}@email.com`;
-        const password = `123123${i}`;
+
+        const password = bcrypt.hashSync(`123123${i}`, 8);
         const login = `login-user-${i}`;
 
         await prisma.user.create({
