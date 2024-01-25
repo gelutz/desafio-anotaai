@@ -1,10 +1,14 @@
 - os seguintes casos precisam ser rotas:
     [x] Como usuário, cadastrar produto linkado com um dono, e com diversas informações:
         titulo, descricao, preço, categoria, ID do dono
-    [-] Como usuário, poder cadastrar uma categoria (relação 1 pra 1 com o produto)
-    [-] Como usuário, assossiar um produto à categoria
-    [-] Como usuário, poder atualizar as informações de produtos e categorias
-    [-] como usuário, poder deletar produtos ou categorias
+    [x] Como usuário, poder cadastrar uma categoria (relação 1 pra vários com o produto)
+    [x] Como usuário, assossiar um produto à categoria
+    [x] Como usuário, poder atualizar as informações de produtos e categorias
+        [x] produto
+        [-] categoria
+    [x] como usuário, poder deletar produtos ou categorias
+        [x] produto
+        [-] categoria
     [-] be able to carry lots of requests per second
     [-] o catálogo de produtos e categorias deve ser buscado em um bucket S3 para que o tempo de resposta seja bem curto
     [-] quando ouver uma atualização no catálogo, publicar a muança para o tópico "catalog-emit"

@@ -19,6 +19,23 @@ class ProductController {
 
         return res.status(201).send(newProduct);
     };
+
+    update = async (req: Request, res: Response): Promise<Response> => {
+        const data: CreateProduct = { ...req.body };
+        const { id } = req.params;
+
+        const updatedProduct = await this.productService.update(id, data);
+
+        return res.status(201).send(updatedProduct);
+    };
+
+    delete = async (req: Request, res: Response): Promise<Response> => {
+        const { id } = req.params;
+
+        await this.productService.delete(id);
+
+        return res.status(201);
+    };
 }
 
 export const productController = new ProductController();

@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient, Product } from "@prisma/client";
+import { Optional } from "@prisma/client/runtime/library";
 
 export type CreateProduct = Omit<Product, "id">;
 
@@ -21,7 +22,7 @@ export class ProductService {
         return await this.prisma.product.create({ data });
     };
 
-    update = async (id: string, data: Prisma.ProductCreateInput): Promise<Product> => {
+    update = async (id: string, data: Optional<CreateProduct>): Promise<Product> => {
         return await this.prisma.product.update({
             data,
             where: { id },

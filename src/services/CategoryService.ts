@@ -1,4 +1,5 @@
 import { Category, Prisma, PrismaClient } from "@prisma/client";
+import { Optional } from "@prisma/client/runtime/library";
 import { prisma } from "../interfaces/Prisma";
 
 export type CreateCategory = Omit<Category, "id">;
@@ -22,7 +23,7 @@ class CategoryService {
         return await this.prisma.category.create({ data });
     };
 
-    update = async (id: string, data: Prisma.CategoryCreateInput): Promise<Category> => {
+    update = async (id: string, data: Optional<CreateCategory>): Promise<Category> => {
         return await this.prisma.category.update({
             data,
             where: { id },

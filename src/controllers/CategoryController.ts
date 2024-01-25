@@ -18,6 +18,23 @@ class CategoryController {
 
         return res.status(201).send(newCategory);
     };
+
+    update = async (req: Request, res: Response): Promise<Response> => {
+        const data: CreateCategory = { ...req.body };
+        const { id } = req.params;
+
+        const updatedProduct = await this.categoryService.update(id, data);
+
+        return res.status(201).send(updatedProduct);
+    };
+
+    delete = async (req: Request, res: Response): Promise<Response> => {
+        const { id } = req.params;
+
+        await this.categoryService.delete(id);
+
+        return res.status(201);
+    };
 }
 
 export const categoryController = new CategoryController();

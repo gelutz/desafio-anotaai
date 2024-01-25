@@ -64,5 +64,24 @@ describe("ProductService", () => {
             const actual = await sut.create({ ...productStub });
             expect(actual).toEqual(productStub);
         });
+
+        it("should throw an error if any information is missing", async () => {
+            const productStub: Product = {
+                id: "id-teste",
+                slug: "slug-teste",
+                title: "title-teste",
+                description: "description-teste",
+                price: 1.99,
+                categoryId: "category-teste",
+                userId: "user-teste",
+            };
+
+            prisma.product.create.mockImplementation(() => {
+                throw Error();
+            });
+
+            const actual = await sut.create({ ...productStub });
+            expect(actual).toThrow();
+        });
     });
 });
