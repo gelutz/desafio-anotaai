@@ -15,3 +15,19 @@
     [-] implementar um consumidor que escuta por movimentos específicos do SQS
     [-] ao receber uma mensagem, o sistema deve fazer a busca no banco
         e atualizar os dados que estão no JSON gerado dentro do bucket S3
+
+----
+ao rodar a aplicação, um usuário precisa estar criado para poder fazer login
+esse usuário pode criar categorias, produtos e outros usuários
+    uma categoria possui: slug (texto único) e título (texto)
+    um produto possui: titulo, descricao, preço, categoria, user Id ("dono" do produto)
+    um usuário possui: login, nome, email, senha
+
+ao criar ou alterar algum produto ou alterar alguma categoria que está linkada a um produto
+    - o sistema precisa emitir uma notificação para o SQS da Amazon
+    - o SQS vai mandar um request para o sistema (ou uma função lambda)
+        - em seguida (o sistema ou a lambda) vai buscar os dados atualizados no banco
+        - criar um arquivo JSON com os dados
+        - fazer upload pro bucket S3
+
+ao acessar a listagem de produtos, o sistema deve buscar o arquivo JSON mais recente dentro do bucket
