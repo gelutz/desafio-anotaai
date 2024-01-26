@@ -1,6 +1,6 @@
 import cors from "cors";
-import "dotenv/config";
 import express from "express";
+import { env } from "./config/Environment";
 import { routes } from "./routes";
 
 const app = express();
@@ -10,7 +10,6 @@ app.use(express.json());
 app.use(routes);
 // app.use(errorHandler);
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-    console.log(`Server iniciado na porta ${port}`);
+app.listen(env.servicePort, () => {
+    console.log(`Server iniciado na porta ${env.servicePort}`);
 });
