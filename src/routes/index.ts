@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { bearerAuth } from "../middlewares/BearerAuth";
-import { authRoutes } from "./auth.route";
-import { categoryRoutes } from "./category.route";
-import { productRoutes } from "./product.route";
-import { userRoutes } from "./user.route";
+import { authRoutes } from "./AuthRoutes";
+import { categoryRoutes } from "./CategoryRoutes";
+import { productRoutes } from "./ProductRoutes";
+import { userRoutes } from "./UserRoutes";
 
 const routes = Router();
 
