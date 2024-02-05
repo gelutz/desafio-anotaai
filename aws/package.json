@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "lugar para experimentar tecnologias à serem usadas no chat",
   "scripts": {
-    "build": "tsc",
-    "postbuild": "cp package*.json dist && (cd dist && npm ci --only=production --ignore-scripts)"
+    "transpile": "tsc",
+    "copy": "cp package*.json dist && (cd dist && npm i --prod)",
+    "compress": "ts-node _compress.ts",
+    "clean": "rm -rf dist/*",
+    "build": "npm run transpile && npm run copy",
+    "postbuild": "npm run compress && npm run clean"
   },
   "author": "Gabriel Lutz",
   "dependencies": {
@@ -13,11 +17,13 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
     "@types/aws-lambda": "^8.10.133",
     "@types/aws-sdk": "^2.7.0",
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
+    "adm-zip": "^0.5.10",
     "archiver": "^6.0.1",
     "aws-lambda": "^1.0.7",
     "eslint": "^8.56.0",
