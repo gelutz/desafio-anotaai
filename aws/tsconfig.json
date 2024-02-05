@@ -1,0 +1,9 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "rootDir": "./lambda",
+        "outDir": "./dist",
+        "target": "ES2020"
+    },
+    "exclude": ["_*", "**/_*"]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "aws-lambda-anotaai",
+  "version": "1.0.0",
+  "description": "lugar para experimentar tecnologias à serem usadas no chat",
+  "scripts": {
+    "build": "tsc",
+    "postbuild": "cp package*.json dist && (cd dist && npm ci --only=production --ignore-scripts)"
+  },
+  "author": "Gabriel Lutz",
+  "dependencies": {
+    "aws-sdk": "^2.1550.0",
+    "mongodb": "^6.3.0",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.133",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "archiver": "^6.0.1",
+    "aws-lambda": "^1.0.7",
+    "eslint": "^8.56.0",
+    "prettier": "2.8",
+    "ts-node": "^10.9.2"
+  }
+}
