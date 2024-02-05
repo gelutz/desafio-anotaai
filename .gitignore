@@ -1,4 +1,6 @@
 *.log
+*.rar
+*.zip
 npm-debug.log*
 
 node_modules/
@@ -7,4 +9,3 @@ dist/
 
 .todo
 .env
-.rar
