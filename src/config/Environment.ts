@@ -5,4 +5,5 @@ export const env = {
     awsSecret: process.env.AWS_SECRET as string,
     servicePort: process.env.PORT || 3001,
     bucketName: process.env.BUCKET_NAME as string,
+    queueUrl: process.env.QUEUE_URL as string,
 };
