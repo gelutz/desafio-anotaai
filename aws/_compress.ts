@@ -1,36 +1,40 @@
-import AdmZip from "adm-zip";
+import archiver from "archiver";
 import * as fs from "fs";
 import * as path from "path";
 
-const folderToZip = "./dist";
-const zipFilePath = "./aws.zip";
+// Usage
+const inputPaths = ["./dist/index.js", "./dist/package.json", "./dist/package-lock.json", "./dist/node_modules"];
+const outputZipPath = "./aws.zip";
 
-(function compressFolder(): void {
-    try {
-        const zip = new AdmZip();
+zipFilesAndFolders(inputPaths, outputZipPath);
 
-        const files = fs.readdirSync(folderToZip);
+function zipFilesAndFolders(inputPaths: string[], outputZipPath: string): void {
+    const output = fs.createWriteStream(outputZipPath);
+    const archive = archiver("zip", {
+        zlib: { level: 9 }, // Sets the compression level.
+    });
 
-        console.log("Compressing files...");
-        for (const file of files) {
-            const filePath = path.join(folderToZip, file);
-            const stats = fs.statSync(filePath);
+    output.on("close", () => {
+        console.log(`${archive.pointer()} total bytes`);
+        console.log("Archiver has finalized the compressing.");
+    });
 
-            if (stats.isFile()) {
-                const baseName = path.basename(filePath);
-                console.log("..." + baseName);
-                zip.addLocalFile(filePath, baseName);
-            } else {
-                const baseName = path.basename(filePath);
-                console.log("..." + baseName);
-                zip.addLocalFolder(filePath, baseName);
+    archive.on("error", (err) => {
+        console.error("Error while zipping:", err);
+    });
+
+    archive.pipe(output);
+
+    inputPaths.forEach((inputPath) => {
+        if (fs.existsSync(inputPath)) {
+            const stat = fs.statSync(inputPath);
+            if (stat.isFile()) {
+                archive.file(inputPath, { name: path.basename(inputPath) });
+            } else if (stat.isDirectory()) {
+                archive.directory(inputPath, path.basename(inputPath));
             }
         }
+    });
 
-        fs.writeFileSync(zipFilePath, zip.toBuffer());
-
-        console.log(`Folder compressed successfully to ${zipFilePath}`);
-    } catch (error) {
-        console.error("Error compressing folder:", error);
-    }
-})();
+    archive.finalize();
+}

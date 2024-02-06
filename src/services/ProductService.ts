@@ -1,14 +1,21 @@
 import { Prisma, PrismaClient, Product } from "@prisma/client";
 import { Optional } from "@prisma/client/runtime/library";
+import { prisma } from "../interfaces/Prisma";
+import { s3Service } from "./S3Service";
 
 export type CreateProduct = Omit<Product, "id">;
 
-export class ProductService {
+class ProductService {
     private prisma: PrismaClient;
 
     constructor(prismaClient: PrismaClient) {
         this.prisma = prismaClient;
     }
+
+    listItems = async (): Promise<void> => {
+        const items = await s3Service.listItems();
+        console.log(items);
+    };
 
     listAll = async (): Promise<Product[]> => {
         return await this.prisma.product.findMany();
@@ -33,3 +40,5 @@ export class ProductService {
         await this.prisma.product.delete({ where: { id } });
     };
 }
+
+export const productService = new ProductService(prisma);

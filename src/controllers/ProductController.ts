@@ -1,10 +1,9 @@
 import { Product } from "@prisma/client";
 import { Request, Response } from "express";
-import { prisma } from "../interfaces/Prisma";
-import { CreateProduct, ProductService } from "../services/ProductService";
+import { CreateProduct, productService } from "../services/ProductService";
 
 class ProductController {
-    productService = new ProductService(prisma);
+    productService = productService;
 
     list = async (_: Request, res: Response): Promise<Response<Product>> => {
         const products: Product[] = await this.productService.listAll();

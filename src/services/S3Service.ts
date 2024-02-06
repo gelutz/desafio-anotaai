@@ -1,4 +1,11 @@
-import { GetObjectCommand, GetObjectCommandOutput, PutObjectCommand, S3 } from "@aws-sdk/client-s3";
+import {
+    GetObjectCommand,
+    GetObjectCommandOutput,
+    ListObjectsV2Command,
+    ListObjectsV2CommandOutput,
+    PutObjectCommand,
+    S3,
+} from "@aws-sdk/client-s3";
 import { readFileSync } from "fs";
 import { env } from "../config/Environment";
 import { S3Bucket } from "../interfaces/S3";
@@ -25,6 +32,15 @@ class S3Service {
             console.error(error);
             return { success: false, data: error };
         }
+    };
+
+    listItems = async (): Promise<ListObjectsV2CommandOutput["Contents"]> => {
+        const response = await this.client.send(
+            new ListObjectsV2Command({
+                Bucket: this.bucketName,
+            })
+        );
+        return response.Contents;
     };
 
     download = async (path: string): Promise<GetObjectCommandOutput["Body"]> => {
