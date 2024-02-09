@@ -1,44 +1,62 @@
-import { Prisma, PrismaClient, Product } from "@prisma/client";
+import { Prisma, Product } from "@prisma/client";
 import { Optional } from "@prisma/client/runtime/library";
 import { prisma } from "../interfaces/Prisma";
+import { queueService } from "./QueueService";
 import { s3Service } from "./S3Service";
 
 export type CreateProduct = Omit<Product, "id">;
 
 class ProductService {
-    private prisma: PrismaClient;
+    private prismaClient = prisma;
+    private s3Service = s3Service;
+    private queueService = queueService;
 
-    constructor(prismaClient: PrismaClient) {
-        this.prisma = prismaClient;
-    }
+    list = async (): Promise<Product[]> => {
+        const items = await this.s3Service.listItems();
+        if (!items) {
+            return [{}] as Product[];
+        }
 
-    listItems = async (): Promise<void> => {
-        const items = await s3Service.listItems();
         console.log(items);
+
+        const latestItem = items.reduce((prev, current) => {
+            console.log(`prev: ${prev.Key}`, `current: ${current.Key}`);
+            if (!prev || (current.LastModified && current.LastModified > prev.LastModified!)) {
+                return current;
+            }
+            return prev;
+        });
+
+        const itemName = latestItem.Key!;
+        console.log(itemName);
+        const item = await this.s3Service.getItem(itemName);
+
+        return JSON.parse(item) as Product[];
     };
 
-    listAll = async (): Promise<Product[]> => {
-        return await this.prisma.product.findMany();
-    };
-
-    find = async (data: Prisma.ProductFindFirstArgs): Promise<Product | null> => {
-        return await this.prisma.product.findFirst(data);
+    find = async (where: Prisma.ProductFindFirstArgs): Promise<Product | null> => {
+        return await this.prismaClient.product.findFirst(where);
     };
 
     create = async (data: CreateProduct): Promise<Product> => {
-        return await this.prisma.product.create({ data });
+        return await this.prismaClient.product.create({ data });
     };
 
     update = async (id: string, data: Optional<CreateProduct>): Promise<Product> => {
-        return await this.prisma.product.update({
+        const updated = await this.prismaClient.product.update({
             data,
             where: { id },
         });
+
+        const queueResponse = await this.queueService.sendMessage("Updated product id: " + updated.id);
+        console.log(queueResponse);
+
+        return updated;
     };
 
     delete = async (id: string): Promise<void> => {
-        await this.prisma.product.delete({ where: { id } });
+        await this.prismaClient.product.delete({ where: { id } });
     };
 }
 
-export const productService = new ProductService(prisma);
+export const productService = new ProductService();

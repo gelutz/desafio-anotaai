@@ -1,7 +1,7 @@
-import { SQS } from "@aws-sdk/client-sqs";
+import { SQSClient } from "@aws-sdk/client-sqs";
 import { env } from "../config/Environment";
 
-export const Q = new SQS({
+export const SQS = new SQSClient({
     region: "us-east-2",
     credentials: {
         accessKeyId: env.awsUserKey,

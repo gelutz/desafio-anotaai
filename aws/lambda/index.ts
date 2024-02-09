@@ -15,7 +15,11 @@ for (const v of Object.entries(env)) {
     }
 }
 
-export const handler: SQSHandler = async (__: SQSEvent, _: Context): Promise<void | SQSBatchResponse> => {
+export const handler: SQSHandler = async (event: SQSEvent, __: Context): Promise<void | SQSBatchResponse> => {
+    const sqsMessageBody = event.Records[0].body as string;
+    const id = sqsMessageBody.slice(sqsMessageBody.lastIndexOf(" ") + 1);
+    const bucketFileName = `${id}-updated.json`;
+
     const client = await MongoClient.connect(env.databaseUrl);
     const db = client.db();
     const products = await db
@@ -52,11 +56,12 @@ export const handler: SQSHandler = async (__: SQSEvent, _: Context): Promise<voi
     });
 
     await s3
-        .upload({
+        .putObject({
             Bucket: env.bucketName,
-            Key: "output_data.json",
+            Key: bucketFileName,
             Body: JSON.stringify(products),
             ContentType: "application/json",
+            Tagging: "product-update",
         })
         .promise();
 };

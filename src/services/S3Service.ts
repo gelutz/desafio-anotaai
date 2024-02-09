@@ -1,27 +1,28 @@
 import {
+    DeleteObjectsCommand,
+    DeletedObject,
     GetObjectCommand,
-    GetObjectCommandOutput,
-    ListObjectsV2Command,
-    ListObjectsV2CommandOutput,
-    PutObjectCommand,
-    S3,
+    HeadBucketCommand,
+    ListObjectsCommand,
+    S3Client,
+    _Object,
 } from "@aws-sdk/client-s3";
-import { readFileSync } from "fs";
 import { env } from "../config/Environment";
 import { S3Bucket } from "../interfaces/S3";
 
 class S3Service {
-    private client: S3;
+    private client: S3Client;
     private bucketName: string;
 
-    constructor(client: S3) {
+    constructor(client: S3Client) {
         this.client = client;
         this.bucketName = env.bucketName;
     }
 
     checkBucket = async (): Promise<{ success: boolean; data?: unknown }> => {
         try {
-            const response = await this.client.headBucket({ Bucket: this.bucketName });
+            const command = new HeadBucketCommand({ Bucket: this.bucketName });
+            const response = await this.client.send(command);
 
             if (response.$metadata.httpStatusCode == 200) {
                 return { success: true };
@@ -34,35 +35,31 @@ class S3Service {
         }
     };
 
-    listItems = async (): Promise<ListObjectsV2CommandOutput["Contents"]> => {
-        const response = await this.client.send(
-            new ListObjectsV2Command({
-                Bucket: this.bucketName,
-            })
-        );
+    listItems = async (): Promise<_Object[] | undefined> => {
+        const command = new ListObjectsCommand({ Bucket: this.bucketName });
+        const response = await this.client.send(command);
+
         return response.Contents;
     };
 
-    download = async (path: string): Promise<GetObjectCommandOutput["Body"]> => {
-        const response = await this.client.send(
-            new GetObjectCommand({
-                Bucket: env.bucketName,
-                Key: path,
-            })
-        );
-        return response.Body;
+    getItem = async (key: string): Promise<string> => {
+        const command = new GetObjectCommand({ Key: key, Bucket: this.bucketName });
+        const response = await this.client.send(command);
+
+        return response.Body?.transformToString() ?? "";
     };
 
-    upload = async (path: string): Promise<string> => {
-        const file = readFileSync(path);
-        const input = {
-            Body: file,
+    deleteItems = async (keys: [{ Key: string; VersionId?: string }]): Promise<DeletedObject[] | undefined> => {
+        const command = new DeleteObjectsCommand({
+            Delete: {
+                Objects: keys,
+                Quiet: false,
+            },
             Bucket: this.bucketName,
-            Key: path,
-        };
-        const response = await this.client.send(new PutObjectCommand(input));
+        });
 
-        return response.ETag || "";
+        const response = await this.client.send(command);
+        return response.Deleted;
     };
 }
 

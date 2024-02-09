@@ -6,8 +6,12 @@ class ProductController {
     productService = productService;
 
     list = async (_: Request, res: Response): Promise<Response<Product>> => {
-        const products: Product[] = await this.productService.listAll();
+        const products = await this.productService.list();
 
+        if (!products) {
+            return res.status(404).send();    
+        }
+        
         return res.status(200).send(products);
     };
 
