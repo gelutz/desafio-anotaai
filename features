@@ -10,8 +10,8 @@
         [x] produto
         [x] categoria
     [x] conexão com o Bucket S3
-    [-] o catálogo de produtos e categorias deve ser buscado em um bucket S3 para que o tempo de resposta seja bem curto
-    [-] quando ouver uma atualização no catálogo, publicar a mudança para o tópico "catalog-emit"
+    [x] o catálogo de produtos e categorias deve ser buscado em um bucket S3 para que o tempo de resposta seja bem curto
+    [x] quando ouver uma atualização no catálogo, publicar a mudança para o tópico "catalog-emit"
     [x] implementar um consumidor que escuta por movimentos específicos do SQS
     [x] ao receber uma mensagem, o sistema deve fazer a busca no banco
         e atualizar os dados que estão no JSON gerado dentro do bucket S3

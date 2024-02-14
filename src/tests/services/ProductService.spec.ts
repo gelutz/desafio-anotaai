@@ -1,12 +1,12 @@
 import { Product } from "@prisma/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { prisma } from "../../interfaces/__mocks__/prisma";
-import { ProductService } from "../../services/ProductService";
+import { productService } from "../../services/ProductService";
 
 vi.mock("../../interfaces/Prisma.ts");
 
 describe("ProductService", () => {
-    let sut: ProductService = new ProductService(prisma);
+    let sut: ProductService = productService;
 
     describe("find", () => {
         beforeEach(() => {
